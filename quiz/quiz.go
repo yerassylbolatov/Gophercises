@@ -9,21 +9,6 @@ import (
 	"time"
 )
 
-func ask(data [][]string) {
-	total := len(data)
-	correct := 0
-
-	for _, line := range data {
-		var answer string
-		fmt.Println(line[0])
-		fmt.Scan(&answer)
-		if answer == line[len(line)-1] {
-			correct++
-		}
-	}
-	fmt.Printf("%d out of %d are answered correctly!\n", correct, total)
-}
-
 func main() {
 	csvFilename := flag.String("csv", "problems.csv", "a csv file in the format of 'question,answer' (default problem.csv)")
 	timeLimit := flag.Int("limit", 30, "the time limit for the quiz in seconds (default 30)")
