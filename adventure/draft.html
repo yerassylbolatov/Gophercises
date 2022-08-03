@@ -1,0 +1,42 @@
+<!--
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Choose Your Own Adventure</title>
+    </head>
+    <body>
+        <section class="page">
+            <h1>{{.Title}}</h1>
+            {{range .Story}}
+                <p>{{.}}</p>
+            {{end}}
+            <ul>
+                {{range .Options}}
+                <li><a href="/{{.Arc}}">{{.Text}}</a></li>
+                {{end}}
+            </ul>
+        </section>>
+        <style>
+            h1 {
+                text-align: center;
+                position: relative;
+                color: brown;
+                font-family: Georgia;
+            }
+            body{
+                font-family: Trebuchet MS;
+            }
+            .page {
+                width: 80%;
+                max-width: 500px;
+                margin: auto;
+                margin-top: 40px;
+                margin-bottom: 40px;
+                padding: 80px;
+                background: #FFFCF6;
+            }
+        </style>
+    </body>
+    </html>
+}-->
