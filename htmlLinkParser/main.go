@@ -1,10 +1,12 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"golang.org/x/net/html"
+	"io/ioutil"
 	"log"
-	"os"
+	"strings"
 )
 
 type link struct {
@@ -13,21 +15,30 @@ type link struct {
 }
 
 func main() {
-	file, err := os.Open("ex1.html")
+	filename := flag.String("file", "ex4.html", "Specify the name of the html document for parsing")
+	flag.Parse()
+	read, err := readHtml(*filename)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer file.Close()
-
-	a := parse(file)
-	fmt.Println(a)
+	parsedHtml, err := parse(read)
+	fmt.Println(parsedHtml)
 }
 
-func parse(file *os.File) []link {
-	var l []link
-	doc, err := html.Parse(file)
+func readHtml(filename string) (string, error) {
+	f, err := ioutil.ReadFile(filename)
 	if err != nil {
-		log.Fatal(err)
+		return "", err
+	}
+	return string(f), nil
+}
+
+func parse(s string) ([]link, error) {
+	r := strings.NewReader(s)
+	var l []link
+	doc, err := html.Parse(r)
+	if err != nil {
+		return nil, err
 	}
 	var f func(*html.Node)
 	f = func(n *html.Node) {
@@ -35,22 +46,27 @@ func parse(file *os.File) []link {
 			for _, a := range n.Attr {
 				if a.Key == "href" {
 					text := extractText(n)
-					l = append(l, link{a.Val, text})
+					l = append(l, link{"Href:" + a.Val, "Text:" + editText(text)})
+					break
 				}
 			}
 		}
-
 		for c := n.FirstChild; c != nil; c = c.NextSibling {
 			f(c)
 		}
 	}
 	f(doc)
-	return l
+	return l, nil
+}
+
+func editText(text string) string {
+	ret := strings.Join(strings.Fields(text), " ")
+	return ret
 }
 
 func extractText(n *html.Node) string {
 	text := ""
-	if n.Type != html.ElementNode && n.Data != "a" && n.Type != html.CommentNode {
+	if n.Type == html.TextNode {
 		text = n.Data
 	}
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
