@@ -1,52 +1,30 @@
-package main
+package link
 
 import (
-	"flag"
-	"fmt"
 	"golang.org/x/net/html"
-	"io/ioutil"
+	"io"
 	"log"
 	"strings"
 )
 
-type link struct {
+type Link struct {
 	Href string
 	Text string
 }
 
-func main() {
-	filename := flag.String("file", "ex4.html", "Specify the name of the html document for parsing")
-	flag.Parse()
-	read, err := readHtml(*filename)
+func Parse(r io.Reader) ([]Link, error) {
+	doc, err := html.Parse(r)
 	if err != nil {
 		log.Fatal(err)
 	}
-	parsedHtml, err := parse(read)
-	fmt.Println(parsedHtml)
-}
-
-func readHtml(filename string) (string, error) {
-	f, err := ioutil.ReadFile(filename)
-	if err != nil {
-		return "", err
-	}
-	return string(f), nil
-}
-
-func parse(s string) ([]link, error) {
-	r := strings.NewReader(s)
-	var l []link
-	doc, err := html.Parse(r)
-	if err != nil {
-		return nil, err
-	}
+	var l []Link
 	var f func(*html.Node)
 	f = func(n *html.Node) {
 		if n.Type == html.ElementNode && n.Data == "a" {
 			for _, a := range n.Attr {
 				if a.Key == "href" {
 					text := extractText(n)
-					l = append(l, link{"Href:" + a.Val, "Text:" + editText(text)})
+					l = append(l, Link{"Href:" + a.Val, "Text:" + editText(text)})
 					break
 				}
 			}

@@ -58,7 +58,7 @@ I created a few simpler HTML files and included them in this repo to help with t
 
 **5. The fourth example will help you remove comments from your link text**
 
-Chances are your first version will include the text from comments inside a link tag. Mine did. Use [ex4.html](ex4.html) to test that case out and fix the bug.
+Chances are your first version will include the text from comments inside a link tag. Mine did. Use [ex4.html](examples/ex4.html) to test that case out and fix the bug.
 
 *Hint: See [NodeType](https://godoc.org/golang.org/x/net/html#NodeType) constants and look for the types that you can ignore.*
 
